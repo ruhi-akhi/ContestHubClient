@@ -26,5 +26,42 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('daisyui')
+  ],
+  daisyui: {
+    themes: [
+      {
+        light: {
+          "primary": "#667eea",
+          "secondary": "#764ba2",
+          "accent": "#f093fb",
+          "neutral": "#3d4451",
+          "base-100": "#ffffff",
+          "info": "#3abff8",
+          "success": "#36d399",
+          "warning": "#fbbd23",
+          "error": "#f87272",
+        },
+        dark: {
+          "primary": "#667eea",
+          "secondary": "#764ba2",
+          "accent": "#f093fb",
+          "neutral": "#191e24",
+          "base-100": "#1f2937",
+          "info": "#3abff8",
+          "success": "#36d399",
+          "warning": "#fbbd23",
+          "error": "#f87272",
+        },
+      },
+    ],
+    darkTheme: "dark",
+    base: true,
+    styled: true,
+    utils: true,
+    prefix: "",
+    logs: true,
+    themeRoot: ":root",
+  },
 }

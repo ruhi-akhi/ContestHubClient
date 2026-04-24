@@ -26,7 +26,7 @@ const { signInGoogle } = useAuth();
     setLoading(true);
 
     try {
-      const response = await fetch("https://contesthub-akhi.vercel.app/api/auth/login", {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

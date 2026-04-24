@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { apiUrl } from "../../api/api";
 
 export default function Leaderboard() {
   const [users, setUsers] = useState([]);
@@ -14,7 +15,7 @@ export default function Leaderboard() {
   const fetchLeaderboard = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`https://contesthub-akhi.vercel.app/api/leaderboard?page=${currentPage}&limit=${itemsPerPage}`);
+      const response = await fetch(apiUrl(`/leaderboard?page=${currentPage}&limit=${itemsPerPage}`));
 
       if (response.ok) {
         const data = await response.json();

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { apiUrl } from "../api/api";
 
 export default function Rankings() {
   const [users, setUsers] = useState([]);
@@ -9,7 +10,7 @@ export default function Rankings() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("https://contesthub-akhi.vercel.app/api/leaderboard");
+        const res = await fetch(apiUrl("/leaderboard"));
         if (!res.ok) throw new Error("Failed to fetch leaderboard");
         const data = await res.json();
         setUsers(data.users || []);

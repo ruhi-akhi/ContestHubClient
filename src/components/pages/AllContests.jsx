@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { apiUrl } from "../../api/api";
 
 export default function AllContests() {
   const [contests, setContests] = useState([]);
@@ -17,8 +18,8 @@ export default function AllContests() {
     const fetchContests = async () => {
       try {
         const url = searchQuery
-          ? `https://contesthub-akhi.vercel.app/api/contests?search=${encodeURIComponent(searchQuery)}`
-          : "https://contesthub-akhi.vercel.app/api/contests";
+          ? apiUrl(`/contests?search=${encodeURIComponent(searchQuery)}`)
+          : apiUrl("/contests");
 
         const response = await fetch(url);
         const data = await response.json();

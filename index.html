@@ -14,16 +14,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Theme initialization script -->
+    <!-- Theme initialization script to prevent flash -->
     <script>
       (function() {
-        const savedTheme = localStorage.getItem('contesthub-theme');
-        const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        const theme = savedTheme || systemPreference;
+        try {
+          const savedTheme = localStorage.getItem('contesthub-theme');
+          const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          const theme = savedTheme || systemPreference;
 
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
+          // Apply theme immediately to prevent flash
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+
+          // Save system preference if no saved theme
+          if (!savedTheme) {
+            localStorage.setItem('contesthub-theme', theme);
+          }
+        } catch (e) {
+          // Fallback to light theme if localStorage is not available
           document.documentElement.classList.remove('dark');
         }
       })();
