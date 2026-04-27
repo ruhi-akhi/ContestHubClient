@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -7,56 +7,20 @@ import {
   StaggerContainer,
   StaggerItem,
   SlideIn,
-  FloatingElement,
-  CountUp,
   buttonVariants
 } from "../animations/AnimatedComponents";
+import { useContests, getPopularContests } from "../../hooks/useContests";
+import { ContestCardSkeletonGrid } from "../SkeletonLoader";
 
 export default function Home() {
-  const [contests, setContests] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [recentWinners, setRecentWinners] = useState([]);
   const navigate = useNavigate();
+  const { data: contests = [], isLoading, error } = useContests();
 
   // Check if user is logged in
   const isLoggedIn = localStorage.getItem("token");
 
-  useEffect(() => {
-    fetchPopularContests();
-    fetchRecentWinners();
-  }, []);
-
-  const fetchPopularContests = async () => {
-    try {
-      const response = await fetch("https://contesthub-akhi.vercel.app/api/contests");
-      const data = await response.json();
-
-      // Sort by participants count (highest first) and take top 5
-      const sortedContests = (data.contests || [])
-        .sort((a, b) => (b.participants?.length || 0) - (a.participants?.length || 0))
-        .slice(0, 5);
-
-      setContests(sortedContests);
-    } catch (error) {
-      console.error("Failed to fetch contests:", error);
-      setContests([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchRecentWinners = async () => {
-    try {
-      const response = await fetch("https://contesthub-akhi.vercel.app/api/recent-winners");
-      if (response.ok) {
-        const data = await response.json();
-        setRecentWinners(data.winners || []);
-      }
-    } catch (error) {
-      console.error("Failed to fetch recent winners:", error);
-    }
-  };
+  const popularContests = getPopularContests(contests);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -76,82 +40,81 @@ export default function Home() {
   return (
     <AnimatedPage>
       {/* Hero Banner Section */}
- <section className="relative text-white overflow-hidden min-h-[90vh] flex items-center">
-  {/* Background Image */}
-  <img
-    src="https://i.ibb.co/32572x4/home.jpg"
-    alt="Hero Background"
-    className="absolute inset-0 w-full h-full object-cover"
-  />
+      <section className="relative text-white overflow-hidden min-h-[90vh] flex items-center">
+        {/* Background Image */}
+        <img
+          src="https://i.ibb.co/32572x4/home.jpg"
+          alt="Hero Background"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
 
-  {/* Dark Overlay */}
-  <div className="absolute inset-0 bg-black/50"></div>
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/50"></div>
 
-  {/* Content */}
-  <div className="relative max-w-7xl mx-auto px-6 py-24 text-center">
-    <SlideIn direction="down">
-      <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-        Unleash Your <span className="text-green-400">Creativity</span>
-        <br />
-        Win Amazing <span className="text-blue-400">Prizes</span>
-      </h1>
-    </SlideIn>
+        {/* Content */}
+        <div className="relative max-w-7xl mx-auto px-6 py-24 text-center">
+          <SlideIn direction="down">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+              Unleash Your <span className="text-green-400">Creativity</span>
+              <br />
+              Win Amazing <span className="text-blue-400">Prizes</span>
+            </h1>
+          </SlideIn>
 
-    {/* Search Bar */}
-    <SlideIn direction="up">
-      <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-10">
-        <div className="relative">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search contests (Logo, Web, Writing...)"
-            className="w-full px-6 py-4 text-lg text-gray-100 rounded-full shadow-xl focus:outline-none focus:ring-4 focus:ring-green-400"
-          />
+          {/* Search Bar */}
+          <SlideIn direction="up">
+            <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-10">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search contests (Logo, Web, Writing...)"
+                  className="w-full px-6 py-4 text-lg text-gray-100 rounded-full shadow-xl focus:outline-none focus:ring-4 focus:ring-green-400"
+                />
 
-          <motion.button
-            type="submit"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-            className="absolute right-2 top-1/2 -translate-y-1/2
-              bg-gradient-to-r from-green-500 to-blue-500
-              text-white px-7 py-2.5 rounded-full
-              font-semibold shadow-lg
-              hover:scale-105 transition-all duration-300"
-          >
-            Search
-          </motion.button>
+                <motion.button
+                  type="submit"
+                  variants={buttonVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                  className="absolute right-2 top-1/2 -translate-y-1/2
+                    bg-gradient-to-r from-green-500 to-blue-500
+                    text-white px-7 py-2.5 rounded-full
+                    font-semibold shadow-lg
+                    hover:scale-105 transition-all duration-300"
+                >
+                  Search
+                </motion.button>
+              </div>
+            </form>
+          </SlideIn>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/all-contests"
+              className="bg-gradient-to-r from-green-500 to-blue-500
+                text-white px-10 py-4 rounded-full text-lg font-semibold
+                shadow-xl hover:scale-105 transition-all duration-300"
+            >
+              Browse All Contests
+            </Link>
+
+            {!isLoggedIn && (
+              <Link
+                to="/register"
+                className="border-2 border-white text-white
+                  px-10 py-4 rounded-full text-lg font-semibold
+                  hover:bg-white hover:text-black
+                  transition-all duration-300"
+              >
+                Join Now — It's Free
+              </Link>
+            )}
+          </div>
         </div>
-      </form>
-    </SlideIn>
-
-    {/* CTA Buttons */}
-    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-      <Link
-        to="/all-contests"
-        className="bg-gradient-to-r from-green-500 to-blue-500
-          text-white px-10 py-4 rounded-full text-lg font-semibold
-          shadow-xl hover:scale-105 transition-all duration-300"
-      >
-        Browse All Contests
-      </Link>
-
-      {!isLoggedIn && (
-        <Link
-          to="/register"
-          className="border-2 border-white text-white
-            px-10 py-4 rounded-full text-lg font-semibold
-            hover:bg-white hover:text-black
-            transition-all duration-300"
-        >
-          Join Now — It’s Free
-        </Link>
-      )}
-    </div>
-  </div>
-</section>
-
+      </section>
 
       {/* Popular Contests Section */}
       <section className="p-8 bg-white dark:bg-gray-800">
@@ -173,19 +136,21 @@ export default function Home() {
           </div>
         </SlideIn>
 
-        {loading ? (
+        {isLoading ? (
+          <ContestCardSkeletonGrid count={5} />
+        ) : error ? (
           <div className="text-center py-8">
-            <p>Loading contests...</p>
+            <p className="text-red-500">Failed to load contests. Please try again later.</p>
           </div>
-        ) : contests.length === 0 ? (
+        ) : popularContests.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-500">No contests available at the moment.</p>
           </div>
         ) : (
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {contests.map((contest) => (
+            {popularContests.map((contest) => (
               <StaggerItem key={contest._id}>
-                <AnimatedCard className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+                <AnimatedCard className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow cursor-pointer">
                   <img
                     src={contest.imageURL || `https://picsum.photos/300/200?random=${contest._id}`}
                     alt={contest.name}
@@ -194,25 +159,19 @@ export default function Home() {
                       e.target.src = `https://picsum.photos/300/200?random=${Math.random()}`;
                     }}
                   />
-                  <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">{contest.name}</h3>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-white line-clamp-2">{contest.name}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                     Participants: {contest.participants?.length || 0}
                   </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                    {contest.description
-                      ? contest.description.length > 60
-                        ? contest.description.slice(0, 60) + "..."
-                        : contest.description
-                      : "No description available"
-                    }
+                  <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 line-clamp-2">
+                    {contest.description || "No description available"}
                   </p>
                   <motion.button
                     onClick={() => handleDetailsClick(contest._id)}
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
-                    className="w-full bg-gradient-to-r from-green-500 to-blue-500
-          text-white px-3 py-2 rounded hover:bg-blue-600 transition-colors"
+                    className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 transition-colors"
                   >
                     Details
                   </motion.button>
@@ -249,8 +208,7 @@ export default function Home() {
 
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-purple-500
-                 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🥈</span>
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2">Mike Chen</h3>
@@ -297,8 +255,7 @@ export default function Home() {
               <h3 className="text-2xl font-bold mb-4">Ready to Join the Winners Circle?</h3>
               <Link
                 to={isLoggedIn ? "/all-contests" : "/register"}
-                className="bg-gradient-to-r from-green-500 to-blue-500
-          text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors inline-block"
+                className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors inline-block"
               >
                 {isLoggedIn ? "Browse Contests" : "Start Your Journey"}
               </Link>
@@ -381,8 +338,7 @@ export default function Home() {
                 ) : (
                   <Link
                     to="/all-contests"
-                    className="bg-gradient-to-r from-green-500 to-blue-500
-          text-white px-8 py-3 rounded-full text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
+                    className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
                   >
                     Browse Contests Now
                   </Link>
