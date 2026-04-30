@@ -48,7 +48,7 @@ export default function About() {
           <motion.h1 
             initial={{ y: -20 }} 
             animate={{ y: 0 }} 
-            className="text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-red-600"
+       className="text-6xl font-extrabold mb-6 text-black"
           >
             About ContestHub
           </motion.h1>

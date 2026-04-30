@@ -62,7 +62,7 @@ export default function Home() {
           </SlideIn>
 
           {/* Search Bar */}
-          <SlideIn direction="up">
+          {/* <SlideIn direction="up">
             <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-10">
               <div className="relative">
                 <input
@@ -88,7 +88,48 @@ export default function Home() {
                 </motion.button>
               </div>
             </form>
-          </SlideIn>
+          </SlideIn> */}
+
+{/* Search Bar Section */}
+<SlideIn direction="up">
+  <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-10">
+    <div className="relative group">
+      {/* Input Field - Border default visible kora hoyeche */}
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search contests (Logo, Web, Writing...)"
+        className="w-full px-8 py-5 text-lg 
+          /* Background color */
+          bg-white dark:bg-gray-900 
+          /* Default Border - focus charau ekhon border thakbe */
+          border-2 border-gray-300 dark:border-gray-700 
+          /* Text colors */
+          text-gray-900 dark:text-white 
+          rounded-full shadow-lg 
+          /* Focus korle border color change hobe */
+          focus:outline-none focus:border-green-400 focus:ring-4 focus:ring-green-400/20 
+          transition-all duration-300"
+      />
+
+      <motion.button
+        type="submit"
+        variants={buttonVariants}
+        whileHover="hover"
+        whileTap="tap"
+        className="absolute right-2.5 top-1/2 -translate-y-1/2
+          bg-gradient-to-r from-green-500 to-blue-600
+          text-white px-8 py-3 rounded-full
+          font-bold shadow-lg transition-all"
+      >
+        Search
+      </motion.button>
+    </div>
+  </form>
+</SlideIn>
+
+
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
