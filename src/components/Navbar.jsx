@@ -2,10 +2,6 @@ import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  FiHome, 
-  FiAward, 
-  FiInfo, 
-  FiHelpCircle, 
   FiUser, 
   FiSettings, 
   FiLogOut,
@@ -15,7 +11,7 @@ import {
   FiBell,
   FiSearch
 } from "react-icons/fi";
-import { MdEmojiEvents, MdDashboard } from "react-icons/md";
+import { MdDashboard } from "react-icons/md";
 import ThemeToggle from "./ThemeToggle";
 import { AuthContext } from "./pages/Context/AuthContext";
 
@@ -63,11 +59,11 @@ export default function Navbar() {
   };
 
   const navItems = [
-    { path: "/", label: "Home", icon: FiHome },
-    { path: "/all-contests", label: "Contests", icon: MdEmojiEvents },
-    { path: "/leaderboard", label: "Leaderboard", icon: FiAward },
-    { path: "/about", label: "About", icon: FiInfo },
-    { path: "/help", label: "Help", icon: FiHelpCircle },
+    { path: "/", label: "Home" },
+    { path: "/all-contests", label: "Contests" },
+    { path: "/leaderboard", label: "Leaderboard" },
+    { path: "/about", label: "About" },
+    { path: "/help", label: "Help" },
   ];
 
   const isActiveLink = (path) => {
@@ -117,7 +113,6 @@ export default function Navbar() {
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-1">
               {navItems.map((item, index) => {
-                const Icon = item.icon;
                 const isActive = isActiveLink(item.path);
                 
                 return (
@@ -129,13 +124,12 @@ export default function Navbar() {
                   >
                     <NavLink
                       to={item.path}
-                      className={`relative flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 group ${
+                      className={`relative flex items-center px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 ${
                         isActive
                           ? 'text-white bg-gradient-primary shadow-lg'
                           : 'text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'
                       }`}
                     >
-                      <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'group-hover:scale-110 transition-transform'}`} />
                       <span>{item.label}</span>
                       {isActive && (
                         <motion.div
@@ -342,7 +336,6 @@ export default function Navbar() {
             >
               <div className="px-4 py-6 space-y-2">
                 {navItems.map((item, index) => {
-                  const Icon = item.icon;
                   const isActive = isActiveLink(item.path);
                   
                   return (
@@ -355,13 +348,12 @@ export default function Navbar() {
                       <Link
                         to={item.path}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
+                        className={`flex items-center px-4 py-3 rounded-xl font-medium transition-all ${
                           isActive
                             ? 'text-white bg-gradient-primary shadow-lg'
                             : 'text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400'
                         }`}
                       >
-                        <Icon className="w-5 h-5" />
                         <span>{item.label}</span>
                       </Link>
                     </motion.div>

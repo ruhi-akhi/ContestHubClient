@@ -97,34 +97,34 @@ export default function Home() {
       </h1>
     </SlideIn>
 
-    {/* Search Bar */}
-    <SlideIn direction="up">
-      <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-10">
-        <div className="relative">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search contests (Logo, Web, Writing...)"
-            className="w-full px-6 py-4 text-lg text-gray-100 rounded-full shadow-xl focus:outline-none focus:ring-4 focus:ring-green-400"
-          />
+    {/* Search Bar — always visible with solid background */}
+    <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-10">
+      <div className="relative">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search contests (Logo, Web, Writing...)"
+          className="w-full px-6 py-4 pr-32 text-lg text-gray-800 placeholder:text-gray-500
+            bg-white/95 backdrop-blur-sm border-2 border-green-400 rounded-full
+            shadow-2xl focus:outline-none focus:ring-4 focus:ring-green-400/50 focus:border-green-500"
+        />
 
-          <motion.button
-            type="submit"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-            className="absolute right-2 top-1/2 -translate-y-1/2
-              bg-gradient-to-r from-green-500 to-blue-500
-              text-white px-7 py-2.5 rounded-full
-              font-semibold shadow-lg
-              hover:scale-105 transition-all duration-300"
-          >
-            Search
-          </motion.button>
-        </div>
-      </form>
-    </SlideIn>
+        <motion.button
+          type="submit"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
+          className="absolute right-2 top-1/2 -translate-y-1/2
+            bg-gradient-to-r from-green-500 to-blue-500
+            text-white px-7 py-2.5 rounded-full
+            font-semibold shadow-lg
+            hover:scale-105 transition-all duration-300"
+        >
+          Search
+        </motion.button>
+      </div>
+    </form>
 
     {/* CTA Buttons */}
     <div className="flex flex-col sm:flex-row gap-4 justify-center">
